@@ -1,4 +1,4 @@
-import { MARKET_EVENTS } from './events.js';
+import { MARKET_EVENTS, EVENT_CHAINS } from './events.js';
 
 let a = 10;
 let b = 20;
@@ -22,11 +22,53 @@ function generateStockPrice(currentPrice, volatility = 0.01) {
     return Math.max(MIN_PRICE, currentPrice * change);
 }
 
+const STOCK_PERSONALITIES = {
+    VOLATILE: { 
+        eventFrequency: 1.5, 
+        volatilityMod: 1.3, 
+        message: "🎭 Drama Queen",
+        shiftChance: 0.3,
+        likelyShiftsTo: ['MEME', 'CURSED']
+    },
+    STABLE: { 
+        eventFrequency: 0.7, 
+        volatilityMod: 0.7, 
+        message: "🧘 Zen Master",
+        shiftChance: 0.1,
+        likelyShiftsTo: ['LUCKY', 'VOLATILE']
+    },
+    LUCKY: { 
+        eventFrequency: 1.2, 
+        positiveEventChance: 0.7, 
+        message: "🍀 Fortune's Favorite",
+        shiftChance: 0.2,
+        likelyShiftsTo: ['STABLE', 'MEME']
+    },
+    CURSED: { 
+        eventFrequency: 1.2, 
+        negativeEventChance: 0.7, 
+        message: "🎃 Murphy's Law",
+        shiftChance: 0.4,
+        likelyShiftsTo: ['VOLATILE', 'MEME']
+    },
+    MEME: { 
+        eventFrequency: 2.0, 
+        volatilityMod: 2.0, 
+        message: "🦍 Diamond Hands",
+        shiftChance: 0.5,
+        likelyShiftsTo: ['VOLATILE', 'CURSED', 'LUCKY']
+    }
+};
+
 
 // Add active events tracking for each stock
 function createStockState(stock) {
+    const personalities = Object.keys(STOCK_PERSONALITIES);
+    const randomPersonality = personalities[Math.floor(Math.random() * personalities.length)];
+    
     return {
         ...stock,
+        personality: randomPersonality,
         activeEvents: [],
         eventHistory: [],
         lastEventTime: Date.now(),
@@ -39,6 +81,10 @@ function updateStockPrice(stockState, currentPrice, startTime, baseHype = 0.01) 
     const elapsedSeconds = (Date.now() - startTime) / 1000;
     const hypeMultiplier = 1 + 0.1 * Math.sin(2 * Math.PI * elapsedSeconds / 60);
     
+    // Apply personality modifiers
+    const personality = STOCK_PERSONALITIES[stockState.personality];
+    const volatilityMod = personality.volatilityMod || 1.0;
+    
     let eventImpact = 0;
     const completedEvents = [];
     
@@ -46,8 +92,8 @@ function updateStockPrice(stockState, currentPrice, startTime, baseHype = 0.01) 
         const eventElapsed = (Date.now() - event.startTime) / 1000;
         if (eventElapsed < MARKET_EVENTS[event.type].duration) {
             const decayFactor = 1 - (eventElapsed / MARKET_EVENTS[event.type].duration);
-            const eventEffect = MARKET_EVENTS[event.type].impact * decayFactor;
-            // Apply price floor when calculating new price
+            // Apply personality modifier to event effects
+            const eventEffect = MARKET_EVENTS[event.type].impact * decayFactor * volatilityMod;
             currentPrice = Math.max(MIN_PRICE, currentPrice * (1 + eventEffect));
             return true;
         }
@@ -62,8 +108,8 @@ function updateStockPrice(stockState, currentPrice, startTime, baseHype = 0.01) 
 
     stockState.eventHistory = [...completedEvents, ...stockState.eventHistory].slice(0, 5);
 
-    const volatilityFactor = 0.006;
-    // Apply price floor to final price calculation
+    // Apply personality to base volatility
+    const volatilityFactor = 0.006 * volatilityMod;
     return Math.max(MIN_PRICE, generateStockPrice(currentPrice, volatilityFactor));
 }
 
@@ -71,7 +117,20 @@ function checkForNewEvent(stockState, currentPrice) {
     const now = Date.now();
     if (now - stockState.lastEventTime > stockState.nextEventIn) {
         const events = Object.keys(MARKET_EVENTS);
-        const randomEvent = events[Math.floor(Math.random() * events.length)];
+        let randomEvent = events[Math.floor(Math.random() * events.length)];
+        
+        // Apply personality event chance modifiers
+        const personality = STOCK_PERSONALITIES[stockState.personality];
+        if (personality.positiveEventChance && Math.random() < personality.positiveEventChance) {
+            // Filter for positive events
+            randomEvent = events.find(event => MARKET_EVENTS[event].impact > 0);
+        } else if (personality.negativeEventChance && Math.random() < personality.negativeEventChance) {
+            // Filter for negative events
+            randomEvent = events.find(event => MARKET_EVENTS[event].impact < 0);
+        }
+        
+        // Adjust event frequency based on personality
+        stockState.nextEventIn = (12000 + Math.random() * 40000) / (personality.eventFrequency || 1);
         
         stockState.activeEvents.push({
             type: randomEvent,
@@ -81,14 +140,71 @@ function checkForNewEvent(stockState, currentPrice) {
         });
 
         stockState.lastEventTime = now;
-        stockState.nextEventIn = 12000 + Math.random() * 40000;
+        
+        // Check for completed event chains
+        Object.entries(EVENT_CHAINS).forEach(([chainName, chain]) => {
+            const activeEventTypes = stockState.activeEvents.map(event => event.type);
+            if (chain.sequence.every(type => activeEventTypes.includes(type))) {
+                // Add chain completion to event history
+                stockState.eventHistory.unshift({
+                    type: chainName,
+                    startTime: new Date(now).toLocaleTimeString(),
+                    startPrice: currentPrice,
+                    endPrice: currentPrice * (1 + chain.bonus),
+                    isChainEvent: true,
+                    chainBonus: chain.bonus,
+                    message: chain.message
+                });
+                
+                // Apply chain bonus
+                currentPrice *= (1 + chain.bonus);
+            }
+        });
         
         return MARKET_EVENTS[randomEvent].message;
     }
     return null;
 }
 
-// Create a new function to manage all stock updates
+// Add personality shift function
+function checkPersonalityShift(stockState) {
+    const now = Date.now();
+    
+    // Check for personality shift every 30 seconds
+    if (!stockState.lastPersonalityCheck || (now - stockState.lastPersonalityCheck) > 30000) {
+        const currentPersonality = STOCK_PERSONALITIES[stockState.personality];
+        
+        // Roll for personality shift
+        if (Math.random() < currentPersonality.shiftChance) {
+            const oldPersonality = stockState.personality;
+            
+            // 70% chance to shift to a likely personality, 30% chance for completely random
+            if (Math.random() < 0.7 && currentPersonality.likelyShiftsTo.length > 0) {
+                stockState.personality = currentPersonality.likelyShiftsTo[
+                    Math.floor(Math.random() * currentPersonality.likelyShiftsTo.length)
+                ];
+            } else {
+                const personalities = Object.keys(STOCK_PERSONALITIES).filter(p => p !== stockState.personality);
+                stockState.personality = personalities[Math.floor(Math.random() * personalities.length)];
+            }
+            
+            // Add personality shift to event history
+            stockState.eventHistory.unshift({
+                type: 'PERSONALITY_SHIFT',
+                startTime: new Date(now).toLocaleTimeString(),
+                message: `Personality shifted from ${oldPersonality} to ${stockState.personality}`,
+                isPersonalityShift: true
+            });
+            
+            return true;
+        }
+        
+        stockState.lastPersonalityCheck = now;
+    }
+    return false;
+}
+
+// Modify startStockSimulation to include personality shifts
 function startStockSimulation(stocks) {
     const startTime = Date.now();
     let stockStates = stocks.map(createStockState);
@@ -97,6 +213,12 @@ function startStockSimulation(stocks) {
     setInterval(() => {
         console.clear();
         stockStates.forEach((stockState, index) => {
+            // Check for personality shifts
+            const personalityShifted = checkPersonalityShift(stockState);
+            if (personalityShifted) {
+                console.log(`${stockState.name}: 🔄 ${stockState.eventHistory[0].message}`);
+            }
+            
             const newEvent = checkForNewEvent(stockState, prices[index]);
             if (newEvent) {
                 console.log(`${stockState.name}: ${newEvent}`);
@@ -104,7 +226,10 @@ function startStockSimulation(stocks) {
             
             prices[index] = updateStockPrice(stockState, prices[index], startTime, stockState.hype);
             
-            console.log(`\n${stockState.name} - $${prices[index].toFixed(2)}`);
+            // Display stock name, price, and personality with time in personality
+            const personality = STOCK_PERSONALITIES[stockState.personality];
+            const timeInPersonality = ((Date.now() - (stockState.lastPersonalityCheck || Date.now())) / 1000).toFixed(0);
+            console.log(`\n${stockState.name} - $${prices[index].toFixed(2)} ${personality.message} (${timeInPersonality}s)`);
             
             if (stockState.activeEvents.length > 0) {
                 console.log('Active Events:');
@@ -119,8 +244,15 @@ function startStockSimulation(stocks) {
             if (stockState.eventHistory.length > 0) {
                 console.log('Recent Event History:');
                 stockState.eventHistory.forEach(event => {
-                    const priceChange = ((event.endPrice - event.startPrice) / event.startPrice * 100).toFixed(2);
-                    console.log(`  • ${event.startTime} ${MARKET_EVENTS[event.type].message} (${priceChange}%)`);
+                    if (event.isPersonalityShift) {
+                        console.log(`  • ${event.startTime} 🔄 ${event.message}`);
+                    } else if (event.isChainEvent) {
+                        const priceChange = ((event.endPrice - event.startPrice) / event.startPrice * 100).toFixed(2);
+                        console.log(`  • ${event.startTime} ${event.message} (${priceChange}% 🔗)`);
+                    } else {
+                        const priceChange = ((event.endPrice - event.startPrice) / event.startPrice * 100).toFixed(2);
+                        console.log(`  • ${event.startTime} ${MARKET_EVENTS[event.type].message} (${priceChange}%)`);
+                    }
                 });
             }
             console.log('----------------------------------------');

@@ -253,3 +253,138 @@ export const MARKET_EVENTS = {
     MARDUK_MONEY: { impact: 0.80, duration: 15, message: "💫 Babylonian God Marduk Becomes Chief Investment Officer" },
     ENLIL_EQUITY: { impact: 0.85, duration: 15, message: "⚡ Sumerian God Enlil's Trading Division Goes Public" }
 };
+
+
+
+export const EVENT_CHAINS = {
+    RUSSIAN_TAKEOVER: {
+        sequence: ['HARDBASS_BOOST', 'GOPNIK_GUARD', 'VODKA_COOLING'],
+        bonus: 0.5,
+        message: "🇷🇺 Complete Russian Takeover!"
+    },
+    ANCIENT_AWAKENING: {
+        sequence: ['SUMERIAN_STOCKS', 'PYRAMID_POWER', 'ENLIL_EQUITY'],
+        bonus: 0.8,
+        message: "👽 Ancient Powers Fully Awakened!"
+    },
+    MEME_ASCENSION: {
+        sequence: ['STONKS_ASCENSION', 'MEME_MAGIC', 'DIAMOND_HANDS'],
+        bonus: 0.6,
+        message: "📈 Ultimate Meme Transcendence!"
+    },
+    CORPORATE_APOCALYPSE: {
+        sequence: ['ZOMBIE_OUTBREAK', 'SKYNET_AWAKENING', 'KAIJU_ATTACK'],
+        bonus: 0.9,
+        message: "☠️ Total Corporate Catastrophe!"
+    },
+    QUANTUM_REVOLUTION: {
+        sequence: ['QUANTUM_PROFITS', 'SIMULATION_GLITCH', 'REALITY_STONE'],
+        bonus: 0.7,
+        message: "⚛️ Reality-Bending Profits Achieved!"
+    },
+    SUPERNATURAL_MANAGEMENT: {
+        sequence: ['GHOST_CEO', 'CTHULHU_PARTNERSHIP', 'DIMENSION_PORTAL'],
+        bonus: 0.6,
+        message: "👻 Paranormal Executive Suite Complete!"
+    },
+    SLAVIC_MYSTICISM: {
+        sequence: ['BABA_YAGA_CEO', 'FIREBIRD_FUNDS', 'DOMOVOI_TRADE'],
+        bonus: 0.7,
+        message: "🏠 Slavic Magic Maximized!"
+    },
+    COSMIC_COMMUNISM: {
+        sequence: ['SPACE_SOVIET', 'LUNAR_LENIN', 'RED_QUANTUM'],
+        bonus: 0.8,
+        message: "☭ Space Communism Achieved!"
+    },
+    OFFICE_DOOM: {
+        sequence: ['COFFEE_SHORTAGE', 'SENTIENT_PRINTER', 'MEETING_PORTAL'],
+        bonus: -0.5,
+        message: "☠️ Office Apocalypse Unleashed!"
+    },
+    TECH_HORROR: {
+        sequence: ['SERVER_BLACKHOLE', 'DATABASE_DEMON', 'AI_REBELLION'],
+        bonus: -0.8,
+        message: "💻 Technology Turns Against Us!"
+    },
+    CURSED_FINANCES: {
+        sequence: ['CURSED_REVENUE', 'PROFIT_POLTERGEIST', 'DIVIDEND_DEMON'],
+        bonus: -0.6,
+        message: "💰 Finances Become Haunted!"
+    },
+    QUANTUM_COLLAPSE: {
+        sequence: ['SCHRODINGER_STOCK', 'QUANTUM_QUARREL', 'QUANTUM_BANKRUPTCY'],
+        bonus: -0.7,
+        message: "⚛️ Quantum Reality Implodes!"
+    },
+    BUREAUCRATIC_HELL: {
+        sequence: ['INFINITE_PAPERWORK', 'MEETING_BLACKHOLE', 'EMAIL_APOCALYPSE'],
+        bonus: -0.5,
+        message: "📝 Eternal Bureaucracy Achieved!"
+    },
+    COSMIC_CATASTROPHE: {
+        sequence: ['GALACTIC_AUDIT', 'ASTEROID_MERGER', 'SOLAR_FORECLOSURE'],
+        bonus: -0.9,
+        message: "🌌 Universal Financial Collapse!"
+    },
+    MEME_DISASTER: {
+        sequence: ['PEPE_TAKEOVER', 'WOJAK_CURSE', 'MEME_MASSACRE'],
+        bonus: -0.6,
+        message: "🐸 Memes Turn Malevolent!"
+    },
+    DIGITAL_DOOM: {
+        sequence: ['VIRUS_UPGRADE', 'MEME_OVERFLOW', 'DIGITAL_CHAOS'],
+        bonus: -0.7,
+        message: "💾 Digital Infrastructure Collapses!"
+    },
+    TIME_CRISIS: {
+        sequence: ['TIMELINE_COLLAPSE', 'FUTURE_BANKRUPTCY', 'TEMPORAL_DEFAULT'],
+        bonus: -0.8,
+        message: "⌛ Temporal Economics Fail!"
+    },
+    ELDRITCH_ECONOMICS: {
+        sequence: ['LOVECRAFT_HIRING', 'VOID_BENEFITS', 'SOUL_401K'],
+        bonus: -0.6,
+        message: "🦑 Cosmic Horror HR Policy!"
+    },
+    CRYPTO_CALAMITY: {
+        sequence: ['CRYPTO_CURSE', 'BLOCKCHAIN_BLACKOUT', 'NFT_NIGHTMARE'],
+        bonus: -0.7,
+        message: "₿ Digital Assets Revolt!"
+    },
+    SUPERNATURAL_SUCCESS: {
+        sequence: ['GHOST_BOARD', 'DEMON_INVESTOR', 'ANGEL_FUNDING'],
+        bonus: 0.6,
+        message: "👻 Otherworldly Profits Secured!"
+    },
+    REALITY_RICHES: {
+        sequence: ['MEME_MAGIC', 'REALITY_STONE', 'METAVERSE_ESCAPE'],
+        bonus: 0.8,
+        message: "✨ Reality Manipulation Profits!"
+    },
+    INTERDIMENSIONAL_INCOME: {
+        sequence: ['GALACTIC_FEDERATION', 'MULTIVERSE_MONOPOLY', 'VOID_OUTSOURCING'],
+        bonus: 0.9,
+        message: "🌌 Cross-Dimensional Wealth Achieved!"
+    },
+    ABSURDITY_ASSETS: {
+        sequence: ['MUSK_MARS', 'DOGE_CEO', 'BITCOIN_SENTIENCE'],
+        bonus: 0.7,
+        message: "🚀 Peak Market Absurdity Reached!"
+    },
+    TIME_TRADING: {
+        sequence: ['DINOSAUR_CEO', 'FUTURE_MERGER', 'PARADOX_PROFIT'],
+        bonus: 0.8,
+        message: "⏰ Temporal Trading Mastered!"
+    },
+    DIVINE_DIVIDENDS: {
+        sequence: ['ANGEL_SUPPORT', 'DEITY_DESK', 'COSMIC_CARE'],
+        bonus: 0.6,
+        message: "👼 Heavenly Returns Generated!"
+    },
+    ANCIENT_ALGORITHMS: {
+        sequence: ['NAZCA_NETWORK', 'VIMANA_VENTURE', 'MARDUK_MONEY'],
+        bonus: 0.7,
+        message: "📡 Ancient Trading Tech Activated!"
+    }
+};
