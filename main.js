@@ -15,10 +15,9 @@ function boxMullerTransform(value, stddev = 0.5) {
     return value + (z0 * stddev);
 }
 function generateStockPrice(currentPrice, volatility = 0.01) {
-    // Ensure positive price by using exponential of Box-Muller
-    // This creates a log-normal distribution which keeps prices > 0
-    const randomFactor = Math.exp(boxMullerTransform(0, volatility));
-    return currentPrice * randomFactor;
+    // Use a simpler random walk with controlled volatility
+    const change = 1 + (volatility * (Math.random() - 0.5));
+    return currentPrice * change;
 }
 
 // Modify event impacts and make them more consistent
@@ -87,9 +86,64 @@ const MARKET_EVENTS = {
     
     // Extreme Events
     ALIEN_TECH: { impact: 0.20, duration: 30, message: "🛸 Alien Technology Acquired" },
-    TIME_MACHINE: { impact: 0.25, duration: 30, message: "⌛ Time Machine Patent Filed" },
+    TIME_MACHINE: { impact: 0.25, duration: 15, message: "⌛ Time Machine Patent Filed" },
     MULTIVERSE_BREACH: { impact: 0.15, duration: 25, message: "🌌 Multiverse Trading Started" },
-    MATRIX_GLITCH: { impact: -0.12, duration: 25, message: "🥄 Matrix Glitch Detected" }
+    MATRIX_GLITCH: { impact: -0.12, duration: 25, message: "🥄 Matrix Glitch Detected" },
+    
+    // Cosmic & Supernatural Events
+    THANOS_SNAP: { impact: -0.50, duration: 30, message: "💫 Thanos Snapped Half of Employees" },
+    INFINITY_STONES: { impact: 0.65, duration: 30, message: "💎 Company Acquires Infinity Stones" },
+    GHOST_CEO: { impact: 0.20, duration: 25, message: "👻 Dead Founder's Ghost Returns as CEO" },
+    DIMENSION_PORTAL: { impact: 0.40, duration: 30, message: "🌀 Office Portal to Another Dimension" },
+    CTHULHU_PARTNERSHIP: { impact: 0.45, duration: 30, message: "🐙 Elder God Partnership Signed" },
+    
+    // Time Travel Mishaps
+    FUTURE_LEAK: { impact: 0.35, duration: 25, message: "🔮 Future Stock Prices Leaked" },
+    PAST_PARADOX: { impact: -0.30, duration: 25, message: "⏰ Past Employee Kills Grandfather" },
+    DINOSAUR_OFFICE: { impact: 0.25, duration: 20, message: "🦖 T-Rex Appointed to Board" },
+    TIME_LOOP: { impact: -0.15, duration: 15, message: "🔄 Company Stuck in Time Loop" },
+    
+    // Meme Economy
+    DOGECOIN_MERGER: { impact: 0.55, duration: 30, message: "🐕 Merging With Dogecoin" },
+    HARAMBE_TRIBUTE: { impact: 0.25, duration: 20, message: "🦍 Harambe Hologram as Spokesperson" },
+    STONKS_ASCENSION: { impact: 0.40, duration: 25, message: "📈 Achieved STONKS Enlightenment" },
+    DIAMOND_HANDS: { impact: 0.30, duration: 20, message: "💎 🙌 Entire Board Gets Diamond Hands" },
+    
+    // Apocalyptic Events
+    ZOMBIE_OUTBREAK: { impact: -0.45, duration: 30, message: "🧟 Zombie Outbreak in HQ" },
+    SKYNET_AWAKENING: { impact: -0.60, duration: 30, message: "🤖 Company AI Becomes Skynet" },
+    KAIJU_ATTACK: { impact: -0.55, duration: 30, message: "🦎 Godzilla Destroys Headquarters" },
+    ALIEN_INVASION: { impact: -0.70, duration: 30, message: "👾 Hostile Alien Takeover Bid" },
+    
+    // Reality Bending
+    SIMULATION_GLITCH: { impact: -0.35, duration: 25, message: "🎮 Matrix Code Leak Confirmed" },
+    MEME_MAGIC: { impact: 0.45, duration: 25, message: "✨ Memes Become Reality" },
+    REALITY_STONE: { impact: 0.80, duration: 30, message: "💫 Reality Successfully Altered" },
+    METAVERSE_ESCAPE: { impact: 0.50, duration: 25, message: "🌐 NPCs Escape to Real World" },
+    
+    // Corporate Chaos
+    PIZZA_CURRENCY: { impact: 0.15, duration: 20, message: "🍕 Pizza Becomes Company Currency" },
+    SENTIENT_PRINTER: { impact: -0.20, duration: 20, message: "🖨️ Office Printer Gains Sentience" },
+    COFFEE_SHORTAGE: { impact: -0.25, duration: 25, message: "☕ Catastrophic Coffee Shortage" },
+    CASUAL_EVERYDAY: { impact: 0.10, duration: 15, message: "👔 Hawaiian Shirts Now Mandatory" },
+    
+    // Interdimensional Business
+    GALACTIC_FEDERATION: { impact: 0.90, duration: 30, message: "🚀 Joining Galactic Federation" },
+    MULTIVERSE_MONOPOLY: { impact: 0.85, duration: 30, message: "🌌 Monopoly Across Multiverse" },
+    VOID_OUTSOURCING: { impact: 0.40, duration: 25, message: "🕳️ Outsourcing to The Void" },
+    QUANTUM_PROFITS: { impact: 0.70, duration: 30, message: "⚛️ Quantum Superposition Profits" },
+    
+    // Peak Absurdity
+    MUSK_MARS: { impact: 0.95, duration: 30, message: "🚀 Elon Moves Company to Mars" },
+    DOGE_CEO: { impact: 0.75, duration: 30, message: "🐕 Actual Dog Becomes CEO" },
+    BITCOIN_SENTIENCE: { impact: 0.65, duration: 30, message: "₿ Bitcoin Becomes Self-Aware" },
+    CHAD_BOARD: { impact: 0.45, duration: 25, message: "💪 Board Replaced by Gigachads" },
+    
+    // Catastrophic Success
+    MONEY_OVERFLOW: { impact: 1.50, duration: 30, message: "💰 Integer Overflow in Bank Account" },
+    STONKS_SINGULARITY: { impact: 2.00, duration: 30, message: "📈 Achieved STONKS Singularity" },
+    UNIVERSAL_BUYOUT: { impact: 5.00, duration: 30, message: "🌌 Company Buys Universe" },
+    REALITY_IPO: { impact: 10.00, duration: 30, message: "✨ Reality Itself Goes Public" }
 };
 
 // Add active events tracking for each stock
@@ -115,8 +169,10 @@ function updateStockPrice(stockState, currentPrice, startTime, baseHype = 0.01) 
         const eventElapsed = (Date.now() - event.startTime) / 1000;
         if (eventElapsed < MARKET_EVENTS[event.type].duration) {
             const decayFactor = 1 - (eventElapsed / MARKET_EVENTS[event.type].duration);
-            // More controlled impact calculation
-            eventImpact += MARKET_EVENTS[event.type].impact * decayFactor;
+            // Direct price impact calculation
+            const eventEffect = MARKET_EVENTS[event.type].impact * decayFactor;
+            // Apply the effect directly to the price
+            currentPrice = currentPrice * (1 + eventEffect);
             return true;
         }
         // Add completed event to history with actual impact
@@ -132,11 +188,9 @@ function updateStockPrice(stockState, currentPrice, startTime, baseHype = 0.01) 
     // Update event history with completed events
     stockState.eventHistory = [...completedEvents, ...stockState.eventHistory].slice(0, 5);
 
-    // More controlled volatility
-    const volatilityFactor = 0.5; // Reduce overall volatility
-    const currentHype = baseHype * hypeMultiplier * (1 + (eventImpact * volatilityFactor));
-    
-    return generateStockPrice(currentPrice, currentHype);
+    // Apply base market volatility
+    const volatilityFactor = 0.005; // Very small base volatility
+    return generateStockPrice(currentPrice, volatilityFactor);
 }
 
 function checkForNewEvent(stockState, currentPrice) {
@@ -203,7 +257,7 @@ function startStockSimulation(stocks) {
 // Start the simulation with initial stocks
 startStockSimulation([
     { name: 'AAPL', price: 100, hype: 0.01 },
-    { name: 'BXMT', price: 0.5, hype: 0.1 }
+    { name: 'BXMT', price: 0.5, hype: 0.01 }
 ]);
 
 
