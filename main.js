@@ -440,54 +440,80 @@ initializeThemeSelector();
 function initializeMobileAccountPanel() {
     const accountPanel = document.getElementById('account-panel');
     let startY = 0;
-    let currentY = 0;
     let isDragging = false;
 
+    function handleTouchStart(e) {
+        isDragging = true;
+        startY = e.touches[0].clientY;
+    }
+
+    function handleTouchMove(e) {
+        if (!isDragging) return;
+        
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - startY;
+        
+        if (deltaY < 0 || deltaY > window.innerHeight * 0.8) return;
+        
+        accountPanel.style.transform = `translateY(${deltaY}px)`;
+        e.preventDefault();
+    }
+
+    function handleTouchEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const currentTransform = new WebKitCSSMatrix(
+            window.getComputedStyle(accountPanel).transform
+        ).m42;
+        
+        const threshold = 100; // pixels to determine expand/collapse
+        
+        if (currentTransform > threshold) {
+            accountPanel.classList.add('collapsed');
+        } else {
+            accountPanel.classList.remove('collapsed');
+        }
+        
+        accountPanel.style.transform = '';
+    }
+
+    function togglePanel() {
+        accountPanel.classList.toggle('collapsed');
+    }
+
     if (window.innerWidth <= 768) {
-        accountPanel.addEventListener('touchstart', (e) => {
-            isDragging = true;
-            startY = e.touches[0].clientY;
-            currentY = accountPanel.getBoundingClientRect().top;
-        });
+        // Add touch event listeners
+        accountPanel.addEventListener('touchstart', handleTouchStart, { passive: false });
+        accountPanel.addEventListener('touchmove', handleTouchMove, { passive: false });
+        accountPanel.addEventListener('touchend', handleTouchEnd);
 
-        accountPanel.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            
-            const deltaY = e.touches[0].clientY - startY;
-            const newY = Math.max(
-                Math.min(deltaY, window.innerHeight - 60),
-                0
-            );
-            
-            accountPanel.style.transform = `translateY(${newY}px)`;
-        });
+        // Add click handler for the drag handle
+        const dragHandle = accountPanel.querySelector('h3');
+        if (dragHandle) {
+            dragHandle.addEventListener('click', togglePanel);
+        }
 
-        accountPanel.addEventListener('touchend', () => {
-            isDragging = false;
-            const currentPosition = accountPanel.getBoundingClientRect().top;
-            const threshold = window.innerHeight * 0.3;
-            
-            if (currentPosition > threshold) {
-                accountPanel.classList.remove('expanded');
-            } else {
-                accountPanel.classList.add('expanded');
-            }
-            
-            accountPanel.style.transform = '';
-        });
-
-        // Toggle panel on drag handle click
-        accountPanel.querySelector('::before').addEventListener('click', () => {
-            accountPanel.classList.toggle('expanded');
-        });
+        // Initialize in expanded state (not collapsed)
+        accountPanel.classList.remove('collapsed');
+    } else {
+        // Remove mobile-specific classes and listeners for desktop
+        accountPanel.classList.remove('collapsed');
+        accountPanel.style.transform = '';
+        accountPanel.removeEventListener('touchstart', handleTouchStart);
+        accountPanel.removeEventListener('touchmove', handleTouchMove);
+        accountPanel.removeEventListener('touchend', handleTouchEnd);
     }
 }
 
-// Add to your initialization code
-window.addEventListener('DOMContentLoaded', () => {
-    initializeMobileAccountPanel();
-});
+// Initialize on load and resize
+window.addEventListener('DOMContentLoaded', initializeMobileAccountPanel);
+window.addEventListener('resize', initializeMobileAccountPanel);
 
-window.addEventListener('resize', () => {
-    initializeMobileAccountPanel();
-});
+// Add viewport meta tag if not already present
+if (!document.querySelector('meta[name="viewport"]')) {
+    const meta = document.createElement('meta');
+    meta.name = 'viewport';
+    meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
+    document.head.appendChild(meta);
+}
