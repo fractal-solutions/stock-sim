@@ -74,7 +74,10 @@ function updateStockPrice(stockState, currentPrice, startTime, baseHype = 0.01) 
     // Update event history with completed events
     stockState.eventHistory = [...completedEvents, ...stockState.eventHistory].slice(0, 5);
 
-    const currentHype = baseHype * hypeMultiplier * (1 + eventImpact);
+    // Increase the multiplier effect of events
+    const eventMultiplier = 2.0;
+    const currentHype = baseHype * hypeMultiplier * (1 + (eventImpact * eventMultiplier));
+    
     return generateStockPrice(currentPrice, currentHype);
 }
 
