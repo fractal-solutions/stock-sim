@@ -19,20 +19,28 @@ function boxMullerTransform(value, stddev = 0.5) {
 function generateStockPrice(currentPrice, volatility = 0.01) {
     const MIN_PRICE = 0.001;
     const change = 1 + (volatility * (Math.random() - 0.5));
+    
+    // Smooth out negative changes
+    if (change < 1) {
+        // Limit maximum negative change
+        const minChange = 0.05; // Maximum 95% drop
+        return Math.max(MIN_PRICE, currentPrice * Math.max(minChange, change));
+    }
+    
     return Math.max(MIN_PRICE, currentPrice * change);
 }
 
 const STOCK_PERSONALITIES = {
     VOLATILE: { 
-        eventFrequency: 2, 
-        volatilityMod: 1.5, 
+        eventFrequency: 1, 
+        volatilityMod: 1.2, 
         message: "🎭 Drama Queen",
         shiftChance: 0.3,
         likelyShiftsTo: ['MEME', 'CURSED']
     },
     STABLE: { 
         eventFrequency: 0.7, 
-        volatilityMod: 0.7, 
+        volatilityMod: 0.4, 
         message: "🧘 Zen Master",
         shiftChance: 0.1,
         likelyShiftsTo: ['LUCKY', 'VOLATILE']
@@ -52,8 +60,8 @@ const STOCK_PERSONALITIES = {
         likelyShiftsTo: ['VOLATILE', 'MEME', 'LUCKY']
     },
     MEME: { 
-        eventFrequency: 2.0, 
-        volatilityMod: 2.0, 
+        eventFrequency: 1.1, 
+        volatilityMod: 0.850, 
         message: "🦍 Diamond Hands",
         shiftChance: 0.5,
         likelyShiftsTo: ['VOLATILE', 'CURSED', 'LUCKY']
@@ -94,7 +102,16 @@ function updateStockPrice(stockState, currentPrice, startTime, baseHype = 0.01) 
             const decayFactor = 1 - (eventElapsed / MARKET_EVENTS[event.type].duration);
             // Apply personality modifier to event effects
             const eventEffect = MARKET_EVENTS[event.type].impact * decayFactor * volatilityMod;
-            currentPrice = Math.max(MIN_PRICE, currentPrice * (1 + eventEffect));
+            
+            // Handle negative impacts more gracefully
+            if (eventEffect < 0) {
+                // Limit maximum negative impact per tick
+                const maxNegativeImpact = -0.85; // 85% max drop per tick
+                const cappedEffect = Math.max(eventEffect, maxNegativeImpact);
+                currentPrice = Math.max(MIN_PRICE, currentPrice * (1 + cappedEffect));
+            } else {
+                currentPrice = Math.max(MIN_PRICE, currentPrice * (1 + eventEffect));
+            }
             return true;
         }
         completedEvents.push({
@@ -108,9 +125,17 @@ function updateStockPrice(stockState, currentPrice, startTime, baseHype = 0.01) 
 
     stockState.eventHistory = [...completedEvents, ...stockState.eventHistory].slice(0, 5);
 
-    // Apply personality to base volatility
+    // Apply personality to base volatility with smoother negative changes
     const volatilityFactor = 0.006 * volatilityMod;
-    return Math.max(MIN_PRICE, generateStockPrice(currentPrice, volatilityFactor));
+    const baseChange = generateStockPrice(currentPrice, volatilityFactor);
+    
+    // Smooth out negative price movements
+    if (baseChange < currentPrice) {
+        const maxDrop = currentPrice * 0.85; // Maximum 15% drop per tick
+        return Math.max(MIN_PRICE, Math.max(maxDrop, baseChange));
+    }
+    
+    return Math.max(MIN_PRICE, baseChange);
 }
 
 function checkForNewEvent(stockState, currentPrice) {
@@ -273,7 +298,7 @@ function startStockSimulation(stocks) {
             }
             console.log('----------------------------------------');
         });
-    }, 1000);
+    }, 2000);
 }
 
 // Start the simulation with initial stocks
