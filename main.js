@@ -314,7 +314,7 @@ function startStockSimulation(stocks) {
                     ${stockState.eventHistory.length > 0 ? `
                         <button class="history-toggle" onclick="toggleHistory('${stockState.name}')">
                             <span>Event History (${stockState.eventHistory.length})</span>
-                            <span class="arrow ${isExpanded ? 'expanded' : ''}">��</span>
+                            <span class="arrow ${isExpanded ? 'expanded' : ''}"></span>
                         </button>
                         <div class="event-history ${isExpanded ? 'expanded' : ''}">
                             ${stockState.eventHistory.map(event => {
@@ -436,3 +436,58 @@ function initializeThemeSelector() {
     }
 }
 initializeThemeSelector();
+
+function initializeMobileAccountPanel() {
+    const accountPanel = document.getElementById('account-panel');
+    let startY = 0;
+    let currentY = 0;
+    let isDragging = false;
+
+    if (window.innerWidth <= 768) {
+        accountPanel.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startY = e.touches[0].clientY;
+            currentY = accountPanel.getBoundingClientRect().top;
+        });
+
+        accountPanel.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            
+            const deltaY = e.touches[0].clientY - startY;
+            const newY = Math.max(
+                Math.min(deltaY, window.innerHeight - 60),
+                0
+            );
+            
+            accountPanel.style.transform = `translateY(${newY}px)`;
+        });
+
+        accountPanel.addEventListener('touchend', () => {
+            isDragging = false;
+            const currentPosition = accountPanel.getBoundingClientRect().top;
+            const threshold = window.innerHeight * 0.3;
+            
+            if (currentPosition > threshold) {
+                accountPanel.classList.remove('expanded');
+            } else {
+                accountPanel.classList.add('expanded');
+            }
+            
+            accountPanel.style.transform = '';
+        });
+
+        // Toggle panel on drag handle click
+        accountPanel.querySelector('::before').addEventListener('click', () => {
+            accountPanel.classList.toggle('expanded');
+        });
+    }
+}
+
+// Add to your initialization code
+window.addEventListener('DOMContentLoaded', () => {
+    initializeMobileAccountPanel();
+});
+
+window.addEventListener('resize', () => {
+    initializeMobileAccountPanel();
+});
