@@ -23,12 +23,16 @@ function generateStockPrice(currentPrice, volatility = 0.01) {
 
 // Add new event types and their impacts
 const MARKET_EVENTS = {
-    EARNINGS_BEAT: { impact: 0.15, duration: 120, message: "📈 Earnings Beat Expectations!" },
-    EARNINGS_MISS: { impact: -0.12, duration: 120, message: "📉 Earnings Miss Expectations" },
-    POSITIVE_NEWS: { impact: 0.05, duration: 60, message: "📰 Positive News Released" },
-    NEGATIVE_NEWS: { impact: -0.04, duration: 60, message: "📰 Negative News Released" },
-    ANALYST_UPGRADE: { impact: 0.08, duration: 90, message: "⭐ Analyst Upgrade" },
-    ANALYST_DOWNGRADE: { impact: -0.07, duration: 90, message: "⬇️ Analyst Downgrade" },
+    EARNINGS_BEAT: { impact: 0.30, duration: 20, message: "📈 Earnings Beat Expectations!" },
+    EARNINGS_MISS: { impact: -0.25, duration: 20, message: "📉 Earnings Miss Expectations" },
+    POSITIVE_NEWS: { impact: 0.15, duration: 15, message: "📰 Positive News Released" },
+    NEGATIVE_NEWS: { impact: -0.12, duration: 15, message: "📰 Negative News Released" },
+    ANALYST_UPGRADE: { impact: 0.20, duration: 25, message: "⭐ Analyst Upgrade" },
+    ANALYST_DOWNGRADE: { impact: -0.18, duration: 25, message: "⬇️ Analyst Downgrade" },
+    MARKET_CRASH: { impact: -0.60, duration: 30, message: "💥 Market Crash!" },
+    BUYOUT_RUMOR: { impact: 0.35, duration: 30, message: "🤝 Buyout Rumors Circulating" },
+    SEC_INVESTIGATION: { impact: -0.30, duration: 30, message: "🚨 SEC Investigation Announced" },
+    PRODUCT_BREAKTHROUGH: { impact: 0.45, duration: 25, message: "🚀 Major Product Breakthrough" }
 };
 
 // Add active events tracking for each stock
@@ -49,23 +53,25 @@ function updateStockPrice(stockState, currentPrice, startTime, baseHype = 0.01) 
     let eventImpact = 0;
     const completedEvents = [];
     
+    // Filter active events and move completed ones to history
     stockState.activeEvents = stockState.activeEvents.filter(event => {
         const eventElapsed = (Date.now() - event.startTime) / 1000;
-        if (eventElapsed < event.duration) {
-            const decayFactor = 1 - (eventElapsed / event.duration);
-            eventImpact += MARKET_EVENTS[event.type].impact * decayFactor;
+        if (eventElapsed < MARKET_EVENTS[event.type].duration) {
+            const decayFactor = 1 - (eventElapsed / MARKET_EVENTS[event.type].duration);
+            eventImpact = (1 + eventImpact) * (1 + MARKET_EVENTS[event.type].impact * decayFactor) - 1;
             return true;
         }
+        // Add completed event to history
         completedEvents.push({
             type: event.type,
             startTime: new Date(event.startTime).toLocaleTimeString(),
             startPrice: event.startPrice,
-            endPrice: currentPrice,
-            impact: MARKET_EVENTS[event.type].impact
+            endPrice: currentPrice
         });
         return false;
     });
 
+    // Update event history with completed events
     stockState.eventHistory = [...completedEvents, ...stockState.eventHistory].slice(0, 5);
 
     const currentHype = baseHype * hypeMultiplier * (1 + eventImpact);
@@ -136,7 +142,7 @@ function startStockSimulation(stocks) {
 // Start the simulation with initial stocks
 startStockSimulation([
     { name: 'AAPL', price: 100, hype: 0.01 },
-    { name: 'BXMT', price: 0.5, hype: 0.5 }
+    { name: 'BXMT', price: 0.5, hype: 0.1 }
 ]);
 
 
