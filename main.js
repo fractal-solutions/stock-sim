@@ -95,7 +95,7 @@ function checkForNewEvent(stockState, currentPrice) {
         });
 
         stockState.lastEventTime = now;
-        stockState.nextEventIn = 30000 + Math.random() * 60000;
+        stockState.nextEventIn = 12000 + Math.random() * 40000;
         
         return MARKET_EVENTS[randomEvent].message;
     }
