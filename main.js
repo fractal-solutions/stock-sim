@@ -166,12 +166,15 @@ function checkForNewEvent(stockState, currentPrice) {
     return null;
 }
 
-// Add personality shift function
+// Add personality shift function with cooldown
 function checkPersonalityShift(stockState) {
     const now = Date.now();
+    const SHIFT_COOLDOWN = 120000; // 2 minutes in milliseconds
     
-    // Check for personality shift every 30 seconds
-    if (!stockState.lastPersonalityCheck || (now - stockState.lastPersonalityCheck) > 30000) {
+    // Check for personality shift every 30 seconds AND ensure cooldown has passed
+    if ((!stockState.lastPersonalityCheck || (now - stockState.lastPersonalityCheck) > 30000) && 
+        (!stockState.lastPersonalityShift || (now - stockState.lastPersonalityShift) > SHIFT_COOLDOWN)) {
+        
         const currentPersonality = STOCK_PERSONALITIES[stockState.personality];
         
         // Roll for personality shift
@@ -188,12 +191,16 @@ function checkPersonalityShift(stockState) {
                 stockState.personality = personalities[Math.floor(Math.random() * personalities.length)];
             }
             
+            // Update shift timestamp
+            stockState.lastPersonalityShift = now;
+            
             // Add personality shift to event history
             stockState.eventHistory.unshift({
                 type: 'PERSONALITY_SHIFT',
                 startTime: new Date(now).toLocaleTimeString(),
                 message: `Personality shifted from ${oldPersonality} to ${stockState.personality}`,
-                isPersonalityShift: true
+                isPersonalityShift: true,
+                nextShiftAvailable: new Date(now + SHIFT_COOLDOWN).toLocaleTimeString()
             });
             
             return true;
@@ -204,7 +211,7 @@ function checkPersonalityShift(stockState) {
     return false;
 }
 
-// Modify startStockSimulation to include personality shifts
+// Update the display in startStockSimulation to show cooldown timer
 function startStockSimulation(stocks) {
     const startTime = Date.now();
     let stockStates = stocks.map(createStockState);
@@ -226,10 +233,19 @@ function startStockSimulation(stocks) {
             
             prices[index] = updateStockPrice(stockState, prices[index], startTime, stockState.hype);
             
-            // Display stock name, price, and personality with time in personality
+            // Display stock name, price, personality, and shift availability
             const personality = STOCK_PERSONALITIES[stockState.personality];
             const timeInPersonality = ((Date.now() - (stockState.lastPersonalityCheck || Date.now())) / 1000).toFixed(0);
-            console.log(`\n${stockState.name} - $${prices[index].toFixed(2)} ${personality.message} (${timeInPersonality}s)`);
+            
+            // Calculate cooldown status
+            const cooldownRemaining = stockState.lastPersonalityShift ? 
+                Math.max(0, 120 - ((Date.now() - stockState.lastPersonalityShift) / 1000)) : 0;
+            
+            const cooldownStatus = cooldownRemaining > 0 ? 
+                `(Shift in ${cooldownRemaining.toFixed(0)}s)` : 
+                "(Shift Ready ✨)";
+            
+            console.log(`\n${stockState.name} - $${prices[index].toFixed(2)} ${personality.message} ${cooldownStatus}`);
             
             if (stockState.activeEvents.length > 0) {
                 console.log('Active Events:');
