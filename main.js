@@ -24,8 +24,8 @@ function generateStockPrice(currentPrice, volatility = 0.01) {
 
 const STOCK_PERSONALITIES = {
     VOLATILE: { 
-        eventFrequency: 1.5, 
-        volatilityMod: 1.3, 
+        eventFrequency: 2, 
+        volatilityMod: 1.5, 
         message: "🎭 Drama Queen",
         shiftChance: 0.3,
         likelyShiftsTo: ['MEME', 'CURSED']
@@ -38,7 +38,7 @@ const STOCK_PERSONALITIES = {
         likelyShiftsTo: ['LUCKY', 'VOLATILE']
     },
     LUCKY: { 
-        eventFrequency: 1.2, 
+        eventFrequency: 1.4, 
         positiveEventChance: 0.7, 
         message: "🍀 Fortune's Favorite",
         shiftChance: 0.2,
@@ -49,7 +49,7 @@ const STOCK_PERSONALITIES = {
         negativeEventChance: 0.7, 
         message: "🎃 Murphy's Law",
         shiftChance: 0.4,
-        likelyShiftsTo: ['VOLATILE', 'MEME']
+        likelyShiftsTo: ['VOLATILE', 'MEME', 'LUCKY']
     },
     MEME: { 
         eventFrequency: 2.0, 
