@@ -1,5 +1,5 @@
 // Modify event impacts and make them more consistent
-const MARKET_EVENTS = {
+export const MARKET_EVENTS = {
     // Cosmic & Supernatural Events
     THANOS_SNAP: { impact: -0.50, duration: 15, message: "💫 Thanos Snapped Half of Employees" },
     INFINITY_STONES: { impact: 0.65, duration: 15, message: "💎 Company Acquires Infinity Stones" },
