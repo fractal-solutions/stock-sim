@@ -72,7 +72,7 @@ function createStockState(stock) {
         activeEvents: [],
         eventHistory: [],
         lastEventTime: Date.now(),
-        nextEventIn: 12000 + Math.random() * 40000
+        nextEventIn: 8000 + Math.random() * 20000
     };
 }
 
@@ -130,7 +130,7 @@ function checkForNewEvent(stockState, currentPrice) {
         }
         
         // Adjust event frequency based on personality
-        stockState.nextEventIn = (12000 + Math.random() * 40000) / (personality.eventFrequency || 1);
+        stockState.nextEventIn = (8000 + Math.random() * 20000) / (personality.eventFrequency || 1);
         
         stockState.activeEvents.push({
             type: randomEvent,
