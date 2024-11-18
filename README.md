@@ -1,66 +1,47 @@
 # Stonks Market Simulator 📈
 
-A whimsical and absurd stock market simulator where anything can happen - from traditional market events to cosmic horrors affecting your portfolio.
+A whimsical stock market simulator featuring dynamic stock personalities and random market events.
 
 ## Features 🚀
 
-- Real-time stock price simulation
-- Random market events that affect stock prices
-- Over 50 unique events ranging from mundane to cosmic
-- Event categories include:
-  - Traditional Market Events
-  - Cosmic & Supernatural Events
-  - Time Travel Mishaps
-  - Quantum Office Mishaps
-  - Corporate Cryptids
-  - Break Room Anomalies
-  - IT Department Summonings
-  - Metaphysical Marketing
-  - Supply Chain Sorcery
-  - Esoteric Engineering
-  - Bureaucratic Blessings
-  - Celestial Customer Service
-  - Catastrophic Success
+- Real-time stock price simulation with dynamic volatility
+- Stocks with distinct personalities that affect their behavior
+- Random personality shifts that change stock behavior
+- Market events that impact stock prices
+- Event history tracking
+- Simple buy/sell trading interface
+- Portfolio management
 
-## Event Impact Scale 📊
+## Stock Personalities 🎭
 
-- Minor Events: ±1% to ±10%
-- Moderate Events: ±10% to ±50%
-- Major Events: ±50% to ±100%
-- Catastrophic Events: ±100% to ±1000%
+Stocks can shift between different personalities that affect their volatility and event frequency:
+- Drama Queen: High volatility, frequent events
+- Zen Master: Low volatility, moderate events
+- More personalities coming soon!
+
+## Trading Features 💰
+
+- Buy and sell stocks at current market price
+- Track your portfolio value and positions
+- View transaction history
+- Monitor active market events
 
 ## Installation 🛠️
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/stonks-market-simulator.git
-   cd stonks-market-simulator
-   ```
-2. Run the simulator:
-   ```bash
-   # Using npm
-   npm run start
-
-   # Using bun
-   bun run start
-
-   # Using yarn
-   yarn start
-   ```
+1. Clone the repository
+2. Open index.html in your browser
 
 ## Usage 🎮
 
-Once running, the simulator will:
-- Generate random stock prices in real-time
-- Trigger random market events that affect prices
-- Display event messages and their impacts
-- Show price history and active events
+- Watch stocks change personality and react to market events
+- Buy low and sell high to grow your portfolio
+- Track event history and active effects
+- Monitor personality shift cooldowns
 
 ## Contributing 🤝
 
-Feel free to submit pull requests or open issues to suggest new events or improvements!
+Feel free to submit pull requests or open issues to suggest new features or improvements!
 
 ## License 📝
 
 MIT License - See LICENSE file for details
-
