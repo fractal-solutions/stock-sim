@@ -1,7 +1,7 @@
 import { MARKET_EVENTS, EVENT_CHAINS } from './events.js';
 
 const MARKET_CONFIG = {
-    globalVolatility: 0.4,  // 1.0 is baseline, 2.0 doubles volatility, 0.5 halves it
+    globalVolatility: 0.05,  // 1.0 is baseline, 2.0 doubles volatility, 0.5 halves it
     minPrice: 0.001,
     baseEventFrequency: 8000,
     maxEventSpacing: 20000
@@ -357,4 +357,46 @@ startStockSimulation([
     { name: 'BXMT', price: 0.5, hype: 0.01 }
 ]);
 
+// Add this near the top of your main.js
+const THEMES = {
+    'default': {
+        gradient: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)'
+    },
+    'cyberpunk': {
+        gradient: 'linear-gradient(135deg, #000428 0%, #004e92 100%)'
+    },
+    'dark-modern': {
+        gradient: 'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)'
+    },
+    'deep-space': {
+        gradient: 'linear-gradient(135deg, #090909 0%, #16222a 50%, #1a1a1a 100%)'
+    },
+    'neon-night': {
+        gradient: 'linear-gradient(135deg, #0a192f 0%, #20232a 50%, #161b22 100%)'
+    },
+    'matrix': {
+        gradient: 'linear-gradient(135deg, #000000 0%, #0a2f1a 50%, #000000 100%)'
+    }
+};
 
+function initializeThemeSelector() {
+    const themeOptions = document.querySelectorAll('.theme-option');
+    
+    themeOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const theme = option.dataset.theme;
+            document.body.style.background = THEMES[theme].gradient;
+            
+            // Save preference
+            localStorage.setItem('preferred-theme', theme);
+        });
+    });
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('preferred-theme');
+    if (savedTheme && THEMES[savedTheme]) {
+        document.body.style.background = THEMES[savedTheme].gradient;
+    }
+}
+
+initializeThemeSelector();

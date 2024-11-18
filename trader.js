@@ -1,5 +1,5 @@
 export class Trader {
-    constructor(initialBalance = 10000) {
+    constructor(initialBalance = 180) {
         this.balance = initialBalance;
         this.positions = new Map(); // Map<stockName, {shares: number, avgPrice: number}>
         this.transactions = [];

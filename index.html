@@ -18,13 +18,36 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
+            background: linear-gradient(
+                135deg,
+                #0f172a 0%,
+                #1e1b4b 50%,
+                #0f172a 100%
+            );
             color: var(--text-primary);
             margin: 0;
             padding: 20px;
             display: grid;
             grid-template-columns: 1fr 300px;
             gap: 20px;
+            zoom: 0.75;
+            min-height: 100vh;
+            background-attachment: fixed;
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            padding-top: 80px;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         #market-container {
@@ -205,16 +228,103 @@
         .arrow.expanded {
             transform: rotate(180deg);
         }
+
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-secondary);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .theme-selector {
+            position: relative;
+            display: inline-block;
+        }
+
+        .theme-button {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-options {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            margin-top: 8px;
+            min-width: 150px;
+        }
+
+        .theme-selector:hover .theme-options {
+            display: block;
+        }
+
+        .theme-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .theme-option:hover {
+            background-color: var(--bg-tertiary);
+        }
     </style>
 </head>
 <body>
+    <nav class="topnav">
+        <div class="title">STONKS ⚡</div>
+        <div class="theme-selector">
+            <button class="theme-button">
+                <span>Theme</span>
+                <span>🎨</span>
+            </button>
+            <div class="theme-options">
+                <div class="theme-option" data-theme="default">Default Theme</div>
+                <div class="theme-option" data-theme="cyberpunk">Cyberpunk</div>
+                <div class="theme-option" data-theme="dark-modern">Dark Modern</div>
+                <div class="theme-option" data-theme="deep-space">Deep Space</div>
+                <div class="theme-option" data-theme="neon-night">Neon Night</div>
+                <div class="theme-option" data-theme="matrix">Matrix</div>
+            </div>
+        </div>
+    </nav>
     <div id="market-container">
         <div id="stocks"></div>
     </div>
     <div id="account-panel">
         <div id="account-info">
             <h3>Account Balance</h3>
-            <div class="balance">$10,000.00</div>
+            <div class="balance">$180.00</div>
         </div>
         <div class="portfolio">
             <h3>Portfolio</h3>
