@@ -314,7 +314,7 @@ function startStockSimulation(stocks) {
                     ${stockState.eventHistory.length > 0 ? `
                         <button class="history-toggle" onclick="toggleHistory('${stockState.name}')">
                             <span>Event History (${stockState.eventHistory.length})</span>
-                            <span class="arrow ${isExpanded ? 'expanded' : ''}">▼</span>
+                            <span class="arrow ${isExpanded ? 'expanded' : ''}">��</span>
                         </button>
                         <div class="event-history ${isExpanded ? 'expanded' : ''}">
                             ${stockState.eventHistory.map(event => {
@@ -357,27 +357,66 @@ startStockSimulation([
     { name: 'BXMT', price: 0.5, hype: 0.01 }
 ]);
 
-// Add this near the top of your main.js
 const THEMES = {
     'default': {
-        gradient: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)'
+        gradient: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)',
+        cardBg: '#1a1b1e',
+        cardSecondary: '#2c2e33',
+        textPrimary: '#ffffff',
+        textSecondary: '#a1a1aa',
+        accent: '#8b5cf6'
     },
     'cyberpunk': {
-        gradient: 'linear-gradient(135deg, #000428 0%, #004e92 100%)'
+        gradient: 'linear-gradient(135deg, #000428 0%, #004e92 100%)',
+        cardBg: '#001e3c',
+        cardSecondary: '#0a2744',
+        textPrimary: '#00ffff',
+        textSecondary: '#80ffff',
+        accent: '#ff00ff'
     },
     'dark-modern': {
-        gradient: 'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)'
+        gradient: 'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)',
+        cardBg: '#1f2937',
+        cardSecondary: '#374151',
+        textPrimary: '#f3f4f6',
+        textSecondary: '#9ca3af',
+        accent: '#3b82f6'
     },
     'deep-space': {
-        gradient: 'linear-gradient(135deg, #090909 0%, #16222a 50%, #1a1a1a 100%)'
+        gradient: 'linear-gradient(135deg, #090909 0%, #16222a 50%, #1a1a1a 100%)',
+        cardBg: '#0f1318',
+        cardSecondary: '#1a1f25',
+        textPrimary: '#e2e8f0',
+        textSecondary: '#94a3b8',
+        accent: '#4f46e5'
     },
     'neon-night': {
-        gradient: 'linear-gradient(135deg, #0a192f 0%, #20232a 50%, #161b22 100%)'
+        gradient: 'linear-gradient(135deg, #0a192f 0%, #20232a 50%, #161b22 100%)',
+        cardBg: '#0d1117',
+        cardSecondary: '#21262d',
+        textPrimary: '#00ff00',
+        textSecondary: '#80ff80',
+        accent: '#ff00ff'
     },
     'matrix': {
-        gradient: 'linear-gradient(135deg, #000000 0%, #0a2f1a 50%, #000000 100%)'
+        gradient: 'linear-gradient(135deg, #000000 0%, #0a2f1a 50%, #000000 100%)',
+        cardBg: '#0a1f0a',
+        cardSecondary: '#143114',
+        textPrimary: '#00ff00',
+        textSecondary: '#00cc00',
+        accent: '#00ff00'
     }
 };
+
+function applyTheme(themeName) {
+    const theme = THEMES[themeName];
+    document.documentElement.style.setProperty('--bg-secondary', theme.cardBg);
+    document.documentElement.style.setProperty('--bg-tertiary', theme.cardSecondary);
+    document.documentElement.style.setProperty('--text-primary', theme.textPrimary);
+    document.documentElement.style.setProperty('--text-secondary', theme.textSecondary);
+    document.documentElement.style.setProperty('--accent-purple', theme.accent);
+    document.body.style.backgroundImage = theme.gradient;
+}
 
 function initializeThemeSelector() {
     const themeOptions = document.querySelectorAll('.theme-option');
@@ -385,9 +424,7 @@ function initializeThemeSelector() {
     themeOptions.forEach(option => {
         option.addEventListener('click', () => {
             const theme = option.dataset.theme;
-            document.body.style.background = THEMES[theme].gradient;
-            
-            // Save preference
+            applyTheme(theme);
             localStorage.setItem('preferred-theme', theme);
         });
     });
@@ -395,8 +432,7 @@ function initializeThemeSelector() {
     // Load saved theme
     const savedTheme = localStorage.getItem('preferred-theme');
     if (savedTheme && THEMES[savedTheme]) {
-        document.body.style.background = THEMES[savedTheme].gradient;
+        applyTheme(savedTheme);
     }
 }
-
 initializeThemeSelector();
