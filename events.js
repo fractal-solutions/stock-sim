@@ -197,5 +197,59 @@ export const MARKET_EVENTS = {
     ANGEL_SUPPORT: { impact: 0.60, duration: 14, message: "👼 Angels Handle Support Tickets" },
     DEITY_DESK: { impact: 0.50, duration: 13, message: "🏛️ Gods Run Help Desk" },
     COSMIC_CARE: { impact: 0.45, duration: 12, message: "🌟 Customer Service Transcends" },
-    KARMA_CALLS: { impact: -0.35, duration: 11, message: "☯️ Support Karma Overflow" }
+    KARMA_CALLS: { impact: -0.35, duration: 11, message: "☯️ Support Karma Overflow" },
+    
+    // Slavic Market Magic
+    HARDBASS_BOOST: { impact: 0.45, duration: 12, message: "🎵 Hardbass Music Mysteriously Boosts Trading Algorithm Speed" },
+    GOPNIK_GUARD: { impact: 0.35, duration: 10, message: "🧔 Squatting Gopniks Scare Away Corporate Spies" },
+    KVASS_POWER: { impact: 0.25, duration: 9, message: "🍺 Servers Achieve 300% Efficiency Running on Kvass" },
+    SLAV_SQUAT: { impact: 0.40, duration: 11, message: "👟 Slavic Squat Stance Increases Programmer Productivity" },
+    
+    // Eastern European Tech
+    BABUSHKA_DEBUG: { impact: 0.55, duration: 13, message: "👵 Babushka's Wooden Spoon Fixes All Code Bugs" },
+    CHEEKI_BREEKI: { impact: 0.50, duration: 12, message: "🕶️ AI Achieves Sentience, Only Speaks in Cheeki Breeki" },
+    TRACKSUIT_TECH: { impact: 0.30, duration: 10, message: "🏃 Adidas Tracksuit Wearing Devs Code at 10x Speed" },
+    SEMECHKI_SURGE: { impact: 0.45, duration: 11, message: "🌻 Sunflower Seed Powered Trading Algorithm Goes Live" },
+    
+    // Russian Cosmic Events
+    SPUTNIK_SIGNAL: { impact: 0.65, duration: 14, message: "🛰️ Original Sputnik Starts Broadcasting Stock Tips" },
+    KALASHNIKOV_CODE: { impact: 0.70, duration: 15, message: "🔫 Code Achieves Kalashnikov-Level Reliability" },
+    BLYAT_BLAST: { impact: -0.40, duration: 12, message: "💥 Massive Cyka Blyat Energy Surge Crashes Servers" },
+    VODKA_COOLING: { impact: 0.35, duration: 11, message: "🍾 Premium Vodka-Cooled Quantum Computer Online" },
+    
+    // Annunaki Interventions
+    NIBIRU_APPROACH: { impact: 0.85, duration: 15, message: "🌍 Planet Nibiru Approaches, Markets Mysteriously Soar" },
+    ANUNNAKI_AUDIT: { impact: 0.75, duration: 15, message: "👽 Ancient Alien Auditors Review Company Books" },
+    SUMERIAN_STOCKS: { impact: 0.90, duration: 15, message: "📜 Sumerian Clay Tablets Reveal Ultimate Trading Strategy" },
+    ENKI_ECONOMICS: { impact: 0.95, duration: 15, message: "⭐ God Enki's Personal Trading Algorithm Discovered" },
+    
+    // Ancient Alien Tech
+    PYRAMID_POWER: { impact: 0.80, duration: 15, message: "🔺 Pyramid Energy Actually Makes Ponzi Scheme Profitable" },
+    GOLDEN_RATIO: { impact: 0.70, duration: 14, message: "📐 Fibonacci Sequence Becomes Sentient, Trades Perfectly" },
+    ALIEN_ABACUS: { impact: 0.65, duration: 13, message: "🧮 Ancient Alien Calculator Outperforms Quantum Computers" },
+    TABLET_TRADE: { impact: 0.60, duration: 12, message: "📋 5000-Year-Old Sumerian Trading Bot Activated" },
+    
+    // Slavic Supernatural
+    BABA_YAGA_CEO: { impact: 0.55, duration: 13, message: "🏠 Baba Yaga's Chicken-Legged House Becomes Mobile HQ" },
+    DOMOVOI_TRADE: { impact: 0.40, duration: 11, message: "🏡 House Spirit Optimizes All Trading Algorithms" },
+    RUSALKA_RISKS: { impact: -0.35, duration: 10, message: "🧜‍♀️ Water Spirit Floods Server Room with Profit" },
+    FIREBIRD_FUNDS: { impact: 0.45, duration: 12, message: "🔥 Magical Firebird Ignites Golden Bull Run" },
+    
+    // Underground Phenomena
+    METRO_MARKET: { impact: 0.30, duration: 10, message: "🚇 Post-Apocalyptic Metro Traders Join Exchange" },
+    BUNKER_BROKER: { impact: 0.35, duration: 11, message: "🚪 Soviet-Era Bunker AI Starts Day Trading" },
+    RADIATION_RISE: { impact: -0.30, duration: 9, message: "☢️ Radioactive Trading Algorithms Multiply Returns" },
+    STALKER_STATS: { impact: 0.40, duration: 12, message: "🌌 Zone Anomalies Generate Market Predictions" },
+    
+    // Cosmic Communist Events
+    SPACE_SOVIET: { impact: 0.50, duration: 13, message: "🚀 Lost Soviet Space Station Controls Market Satellites" },
+    RED_QUANTUM: { impact: 0.45, duration: 12, message: "⚛️ Communist Quantum Computer Shares Profits Equally" },
+    COSMIC_CCCP: { impact: 0.55, duration: 14, message: "☭ Communist Space Program Reveals Market Secrets" },
+    LUNAR_LENIN: { impact: 0.60, duration: 15, message: "🌙 Lenin's Preserved Brain Controls Lunar Trading Base" },
+    
+    // Ancient Astronaut Assets
+    NAZCA_NETWORK: { impact: 0.70, duration: 15, message: "📡 Nazca Lines Activate Global Trading Network" },
+    VIMANA_VENTURE: { impact: 0.75, duration: 15, message: "🛸 Ancient Vimana Spacecraft" },
+    MARDUK_MONEY: { impact: 0.80, duration: 15, message: "💫 Babylonian God Marduk Becomes Chief Investment Officer" },
+    ENLIL_EQUITY: { impact: 0.85, duration: 15, message: "⚡ Sumerian God Enlil's Trading Division Goes Public" }
 };
