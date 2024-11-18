@@ -428,22 +428,24 @@
                 transform: translateY(calc(100% - 50px));
             }
 
-            #account-panel::before {
+            #account-panel h3 {
+                position: relative;
+                margin-top: 5px;
+                margin-bottom: 15px;
+                cursor: grab;
+                padding-top: 15px;
+            }
+
+            #account-panel h3::before {
                 content: '';
                 position: absolute;
-                top: 10px;
+                top: 0;
                 left: 50%;
                 transform: translateX(-50%);
                 width: 40px;
                 height: 4px;
                 background: var(--bg-tertiary);
                 border-radius: 2px;
-                cursor: pointer;
-            }
-
-            #account-panel h3 {
-                margin-top: 5px;
-                margin-bottom: 15px;
             }
 
             .portfolio {

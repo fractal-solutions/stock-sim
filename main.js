@@ -443,6 +443,7 @@ function initializeMobileAccountPanel() {
     let isDragging = false;
 
     function handleTouchStart(e) {
+        if (!e.target.closest('h3')) return; // Only allow dragging from the header
         isDragging = true;
         startY = e.touches[0].clientY;
     }
@@ -453,9 +454,19 @@ function initializeMobileAccountPanel() {
         const currentY = e.touches[0].clientY;
         const deltaY = currentY - startY;
         
-        if (deltaY < 0 || deltaY > window.innerHeight * 0.8) return;
+        // Invert the direction: negative deltaY moves panel up, positive moves it down
+        if (accountPanel.classList.contains('collapsed')) {
+            // If collapsed, only allow upward movement (negative deltaY)
+            if (deltaY < 0) {
+                accountPanel.style.transform = `translateY(calc(100% - 50px + ${deltaY}px))`;
+            }
+        } else {
+            // If expanded, only allow downward movement (positive deltaY)
+            if (deltaY > 0) {
+                accountPanel.style.transform = `translateY(${deltaY}px)`;
+            }
+        }
         
-        accountPanel.style.transform = `translateY(${deltaY}px)`;
         e.preventDefault();
     }
 
@@ -467,12 +478,18 @@ function initializeMobileAccountPanel() {
             window.getComputedStyle(accountPanel).transform
         ).m42;
         
-        const threshold = 100; // pixels to determine expand/collapse
+        const threshold = 50; // pixels to determine expand/collapse
         
-        if (currentTransform > threshold) {
-            accountPanel.classList.add('collapsed');
+        if (accountPanel.classList.contains('collapsed')) {
+            // If moving up from collapsed state
+            if (currentTransform < -threshold) {
+                accountPanel.classList.remove('collapsed');
+            }
         } else {
-            accountPanel.classList.remove('collapsed');
+            // If moving down from expanded state
+            if (currentTransform > threshold) {
+                accountPanel.classList.add('collapsed');
+            }
         }
         
         accountPanel.style.transform = '';
@@ -494,7 +511,7 @@ function initializeMobileAccountPanel() {
             dragHandle.addEventListener('click', togglePanel);
         }
 
-        // Initialize in expanded state (not collapsed)
+        // Initialize in expanded state
         accountPanel.classList.remove('collapsed');
     } else {
         // Remove mobile-specific classes and listeners for desktop
