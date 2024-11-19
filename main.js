@@ -456,18 +456,16 @@ initializeThemeSelector();
 
 function initializeMobileAccountPanel() {
     const accountPanel = document.getElementById('account-panel');
+    const header = accountPanel.querySelector('h3');
     
     function handlePanelClick(e) {
-        // Only toggle if clicking the header area or drag handle
-        const header = accountPanel.querySelector('h3');
         if (e.target === header || e.target.closest('h3')) {
             accountPanel.classList.toggle('collapsed');
-            e.stopPropagation(); // Prevent body click handler from firing
+            e.stopPropagation();
         }
     }
 
     function handleOutsideClick(e) {
-        // If panel is expanded and click is outside panel
         if (!accountPanel.classList.contains('collapsed') && 
             !accountPanel.contains(e.target)) {
             accountPanel.classList.add('collapsed');
@@ -475,12 +473,8 @@ function initializeMobileAccountPanel() {
     }
 
     if (window.innerWidth <= 768) {
-        // Remove previous listeners if any
-        accountPanel.removeEventListener('touchstart', handlePanelClick);
-        document.body.removeEventListener('click', handleOutsideClick);
-        
         // Add click handlers
-        accountPanel.querySelector('h3').addEventListener('click', handlePanelClick);
+        header.addEventListener('click', handlePanelClick);
         document.body.addEventListener('click', handleOutsideClick);
 
         // Initialize in expanded state
@@ -488,7 +482,7 @@ function initializeMobileAccountPanel() {
     } else {
         // Remove mobile-specific classes and listeners for desktop
         accountPanel.classList.remove('collapsed');
-        accountPanel.querySelector('h3').removeEventListener('click', handlePanelClick);
+        header.removeEventListener('click', handlePanelClick);
         document.body.removeEventListener('click', handleOutsideClick);
     }
 }
