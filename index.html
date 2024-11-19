@@ -459,7 +459,7 @@
                 padding: 10px;
                 padding-top: calc(var(--nav-height) + 10px);
                 zoom: 0.9;
-                -webkit-text-size-adjust: 70%;
+                -webkit-text-size-adjust: 90%;
                 width: 100%;
                 max-width: 100vw;
                 overflow-x: hidden;
@@ -540,8 +540,35 @@
             .stock-container {
                 margin-bottom: 15px;
                 margin: 0 0 15px 0;
-                width: auto;
+                width: 100%;
                 box-sizing: border-box;
+            }
+                /* Adjust inner elements */
+            .stock-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .stock-info {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .trade-buttons {
+                display: flex;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .btn {
+                flex: 1;
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .events-container {
+                padding: 10px;
+                margin-top: 10px;
             }
             /* Adjust main container */
             #market-container {
