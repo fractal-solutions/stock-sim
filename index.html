@@ -298,13 +298,55 @@
                 color-mix(in srgb, var(--bg-tertiary) 98%, white),
                 var(--bg-tertiary)
             );
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin: 5px 0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 
-                0 1px 2px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .position-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .position-symbol {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .position-shares {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        .position-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .position-pnl {
+            text-align: right;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            float: right;
+        }
+
+        .position-pnl.profit {
+            color: var(--accent-green);
+            background: color-mix(in srgb, var(--accent-green) 15%, transparent);
+        }
+
+        .position-pnl.loss {
+            color: var(--accent-red);
+            background: color-mix(in srgb, var(--accent-red) 15%, transparent);
         }
 
         .arrow {
@@ -502,6 +544,26 @@
                 -webkit-overflow-scrolling: touch;
             }
         }
+
+        /* Optional: Add total P/L at the top of portfolio */
+        .portfolio-summary {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #total-pnl.profit {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        #total-pnl.loss {
+            color: var(--accent-red);
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -532,6 +594,10 @@
         </div>
         <div class="portfolio">
             <h3>Portfolio</h3>
+            <div class="portfolio-summary">
+                <span>Total P/L</span>
+                <span id="total-pnl">$0.00 (0.00%)</span>
+            </div>
             <div id="positions"></div>
         </div>
     </div>

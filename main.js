@@ -285,7 +285,7 @@ function startStockSimulation(stocks) {
             const isExpanded = expandedHistories.has(stockState.name);
             
             return `
-                <div class="stock-container" data-stock="${stockState.name}">
+                <div class="stock-container" data-stock="${stockState.name}" data-price="${prices[index]}">
                     <div class="stock-header">
                         <div class="stock-info">
                             <span class="ticker">${stockState.name}</span>
@@ -339,6 +339,11 @@ function startStockSimulation(stocks) {
                 </div>
             `;
         }).join('');
+
+        // Update P/L after updating stock displays
+        if (window.trader) {
+            window.trader.updateUI(prices);
+        }
     }
 
     setInterval(() => {

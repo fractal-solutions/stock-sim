@@ -82,20 +82,84 @@ export class Trader {
         return this.positions.get(stockName);
     }
 
+    calculatePnL(stockName, currentPrice) {
+        const position = this.positions.get(stockName);
+        if (!position) return 0;
+        
+        const costBasis = position.shares * position.avgPrice;
+        const currentValue = position.shares * currentPrice;
+        return currentValue - costBasis;
+    }
+
+    calculatePnLPercentage(stockName, currentPrice) {
+        const position = this.positions.get(stockName);
+        if (!position) return 0;
+        
+        const pnl = this.calculatePnL(stockName, currentPrice);
+        const costBasis = position.shares * position.avgPrice;
+        return costBasis > 0 ? (pnl / costBasis) * 100 : 0;
+    }
+
     updateUI() {
         // Update account balance
         const balanceElement = document.querySelector('.balance');
         balanceElement.textContent = `$${this.balance.toFixed(2)}`;
 
-        // Update positions
+        // Calculate total P/L
+        let totalPnL = 0;
+        let totalCostBasis = 0;
+
+        // Update positions with P/L
         const positionsContainer = document.getElementById('positions');
         positionsContainer.innerHTML = Array.from(this.positions.entries())
-            .map(([stockName, position]) => `
-                <div class="position">
-                    <div>${stockName}</div>
-                    <div>${position.shares} shares @ $${position.avgPrice.toFixed(2)}</div>
-                </div>
-            `).join('');
+            .map(([stockName, position]) => {
+                // Get current price from the stock container
+                const stockElement = document.querySelector(`[data-stock="${stockName}"]`);
+                const currentPrice = stockElement ? 
+                    parseFloat(stockElement.dataset.price) : 
+                    position.avgPrice;
+
+                const pnl = this.calculatePnL(stockName, currentPrice);
+                const pnlPercentage = this.calculatePnLPercentage(stockName, currentPrice);
+                
+                // Add to totals
+                totalPnL += pnl;
+                totalCostBasis += position.shares * position.avgPrice;
+
+                const isProfitable = pnl >= 0;
+
+                return `
+                    <div class="position">
+                        <div class="position-header">
+                            <span class="position-symbol">${stockName}</span>
+                            <span class="position-shares">${position.shares} shares</span>
+                        </div>
+                        <div class="position-details">
+                            <div class="position-avg-price">
+                                Avg Price: $${position.avgPrice.toFixed(2)}
+                            </div>
+                            <div class="position-current">
+                                Current: $${currentPrice.toFixed(2)}
+                            </div>
+                        </div>
+                        <div class="position-pnl ${isProfitable ? 'profit' : 'loss'}">
+                            ${isProfitable ? '▲' : '▼'} $${Math.abs(pnl).toFixed(2)} 
+                            (${Math.abs(pnlPercentage).toFixed(2)}%)
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+        // Update total P/L display
+        const totalPnLElement = document.getElementById('total-pnl');
+        if (totalPnLElement) {
+            const totalPnLPercentage = totalCostBasis > 0 ? 
+                (totalPnL / totalCostBasis) * 100 : 0;
+            const isProfitable = totalPnL >= 0;
+            
+            totalPnLElement.className = isProfitable ? 'profit' : 'loss';
+            totalPnLElement.textContent = `${isProfitable ? '▲' : '▼'} $${Math.abs(totalPnL).toFixed(2)} (${Math.abs(totalPnLPercentage).toFixed(2)}%)`;
+        }
     }
 }
 
