@@ -578,6 +578,79 @@
             color: var(--accent-red);
             font-weight: 600;
         }
+
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            min-width: 200px;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .toast.success {
+            background: rgba(34, 197, 94, 0.9); /* var(--accent-green) with opacity */
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .toast.error {
+            background: rgba(239, 68, 68, 0.9); /* var(--accent-red) with opacity */
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .toast.info {
+            background: rgba(59, 130, 246, 0.9); /* var(--accent-blue) with opacity */
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* Optional: Add subtle text shadow for better readability */
+        .toast {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Optional: Add hover effect */
+        .toast:hover {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -616,6 +689,7 @@
         </div>
     </div>
     <div class="overlay"></div>
+    <div id="toast-container"></div>
     <script type="module" src="main.js"></script>
     <script type="module" src="trader.js"></script>
 </body>

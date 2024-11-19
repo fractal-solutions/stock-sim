@@ -5,77 +5,94 @@ export class Trader {
         this.transactions = [];
     }
 
+    showToast(message, type = 'info') {
+        const toastContainer = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        // Add icon based on type
+        const icon = type === 'success' ? '✅' : 
+                    type === 'error' ? '❌' : 
+                    'ℹ️';
+        
+        toast.innerHTML = `${icon} ${message}`;
+        toastContainer.appendChild(toast);
+
+        // Force reflow to trigger animation
+        toast.offsetHeight;
+        toast.style.opacity = '1';
+
+        // Remove toast after animation
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toastContainer.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }
+
     canBuy(stockName, shares, currentPrice) {
         const totalCost = shares * currentPrice;
         return this.balance >= totalCost;
     }
 
     buy(stockName, shares, currentPrice) {
-        const totalCost = shares * currentPrice;
+        const cost = shares * currentPrice;
         
-        if (!this.canBuy(stockName, shares, currentPrice)) {
-            throw new Error("Insufficient funds");
+        if (cost > this.balance) {
+            this.showToast(`Insufficient funds to buy ${shares} shares of ${stockName}`, 'error');
+            return false;
         }
 
-        // Update balance
-        this.balance -= totalCost;
-
-        // Update position
-        if (this.positions.has(stockName)) {
-            const position = this.positions.get(stockName);
-            const newTotalShares = position.shares + shares;
-            const newTotalCost = (position.shares * position.avgPrice) + totalCost;
-            position.shares = newTotalShares;
-            position.avgPrice = newTotalCost / newTotalShares;
-        } else {
-            this.positions.set(stockName, {
-                shares: shares,
-                avgPrice: currentPrice
-            });
-        }
-
-        // Record transaction
+        this.balance -= cost;
+        
+        const position = this.positions.get(stockName) || { shares: 0, avgPrice: 0 };
+        const totalShares = position.shares + shares;
+        const totalCost = (position.shares * position.avgPrice) + cost;
+        position.shares = totalShares;
+        position.avgPrice = totalCost / totalShares;
+        
+        this.positions.set(stockName, position);
         this.transactions.push({
-            type: 'BUY',
+            type: 'buy',
             stockName,
             shares,
             price: currentPrice,
-            total: totalCost,
-            timestamp: new Date()
+            timestamp: Date.now()
         });
 
+        this.showToast(`Bought ${shares} shares of ${stockName} at $${currentPrice.toFixed(2)}`, 'success');
         this.updateUI();
+        return true;
     }
 
     sell(stockName, shares, currentPrice) {
         const position = this.positions.get(stockName);
         
         if (!position || position.shares < shares) {
-            throw new Error("Insufficient shares");
+            this.showToast(`Insufficient shares to sell ${shares} shares of ${stockName}`, 'error');
+            return false;
         }
 
-        const totalValue = shares * currentPrice;
-
-        // Update balance
-        this.balance += totalValue;
-
-        // Update position
+        const revenue = shares * currentPrice;
+        this.balance += revenue;
+        
         position.shares -= shares;
         if (position.shares === 0) {
             this.positions.delete(stockName);
         }
-
-        // Record transaction
+        
         this.transactions.push({
-            type: 'SELL',
+            type: 'sell',
             stockName,
             shares,
             price: currentPrice,
-            total: totalValue,
-            timestamp: new Date()
+            timestamp: Date.now()
         });
 
+        this.showToast(`Sold ${shares} shares of ${stockName} at $${currentPrice.toFixed(2)}`, 'success');
         this.updateUI();
+        return true;
     }
 
     getPosition(stockName) {
