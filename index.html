@@ -459,7 +459,10 @@
                 padding: 10px;
                 padding-top: calc(var(--nav-height) + 10px);
                 zoom: 0.9;
-                -webkit-text-size-adjust: 90%;
+                -webkit-text-size-adjust: 80%;
+                width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
             }
 
             #account-panel {
@@ -536,6 +539,9 @@
             /* Adjust spacing for zoomed layout */
             .stock-container {
                 margin-bottom: 15px;
+                margin: 0 0 15px 0;
+        width: auto;
+        box-sizing: border-box;
             }
 
             #toast-container {
