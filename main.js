@@ -299,17 +299,21 @@ function startStockSimulation(stocks) {
                         </div>
                     </div>
                     
-                    ${stockState.activeEvents.length > 0 ? `
-                        <div class="events-container">
-                            <strong>Active Events:</strong>
-                            ${stockState.activeEvents.map(event => {
-                                const elapsed = ((Date.now() - event.startTime) / 1000).toFixed(0);
-                                return `<div class="event">
-                                    • ${MARKET_EVENTS[event.type].message} (${elapsed}s elapsed)
-                                </div>`;
-                            }).join('')}
+                    <div class="events-container">
+                        <strong>Active Events:</strong>
+                        <div class="active-events">
+                            ${stockState.activeEvents.length > 0 ? 
+                                stockState.activeEvents.map(event => {
+                                    const elapsed = ((Date.now() - event.startTime) / 1000).toFixed(0);
+                                    return `<div class="event">
+                                        • ${MARKET_EVENTS[event.type].message} (${elapsed}s elapsed)
+                                    </div>`;
+                                }).join('')
+                                : 
+                                `<div class="event empty-event">• No active events</div>`
+                            }
                         </div>
-                    ` : '<div class="events-container">Active Events: None</div>'}
+                    </div>
                     
                     ${stockState.eventHistory.length > 0 ? `
                         <button class="history-toggle" onclick="toggleHistory('${stockState.name}')">
