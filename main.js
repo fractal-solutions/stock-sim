@@ -353,8 +353,16 @@ function startStockSimulation(stocks) {
 
 // Start the simulation with initial stocks
 startStockSimulation([
-    { name: 'AAPL', price: 100, hype: 0.01 },
-    { name: 'BXMT', price: 0.5, hype: 0.01 }
+    { name: 'RUG', price: 100, hype: 0.01 },
+    { name: 'PULL', price: 0.5, hype: 0.01 },
+    { name: 'DICE', price: 14, hype: 0.01 },
+    { name: 'HTTP', price: 35, hype: 0.01 },
+    { name: 'MEME', price: 420.69, hype: 0.01 },
+    { name: 'YOLO', price: 69.42, hype: 0.01 },
+    { name: 'MOON', price: 1337, hype: 0.01 },
+    { name: 'STONK', price: 42.0, hype: 0.01 },
+    { name: 'HODL', price: 8008.5, hype: 0.01 },
+    { name: 'FOMO', price: 999.99, hype: 0.01 }
 ]);
 
 const THEMES = {
