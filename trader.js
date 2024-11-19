@@ -15,7 +15,7 @@ export class Trader {
                     type === 'error' ? '❌' : 
                     'ℹ️';
         
-        toast.innerHTML = `${icon} ${message}`;
+        toast.innerHTML = `${icon} <span style="flex: 1">${message}</span>`;
         toastContainer.appendChild(toast);
 
         // Force reflow to trigger animation
@@ -26,7 +26,9 @@ export class Trader {
         setTimeout(() => {
             toast.style.opacity = '0';
             setTimeout(() => {
-                toastContainer.removeChild(toast);
+                if (toastContainer.contains(toast)) {
+                    toastContainer.removeChild(toast);
+                }
             }, 300);
         }, 3000);
     }

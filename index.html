@@ -3,7 +3,7 @@
 <head>
     <title>Stonks Market Simulator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=no">
     <style>
         :root {
             --bg-primary: #0a0b0d;
@@ -458,6 +458,8 @@
                 grid-template-columns: 1fr;
                 padding: 10px;
                 padding-top: calc(var(--nav-height) + 10px);
+                zoom: 0.9;
+                -webkit-text-size-adjust: 90%;
             }
 
             #account-panel {
@@ -530,6 +532,17 @@
                 display: block;
                 opacity: 1;
             }
+
+            /* Adjust spacing for zoomed layout */
+            .stock-container {
+                margin-bottom: 15px;
+            }
+
+            #toast-container {
+                /* Adjust toast position for zoomed layout */
+                top: calc(20px / 0.9);
+                right: calc(20px / 0.9);
+            }
         }
 
         /* Topnav responsive design */
@@ -581,12 +594,13 @@
 
         #toast-container {
             position: fixed;
-            top: 20px;
+            top: 80px;
             right: 20px;
-            z-index: 1000;
+            z-index: 2000;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            pointer-events: none;
         }
 
         .toast {
@@ -604,6 +618,7 @@
             opacity: 0;
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
+            pointer-events: auto;
         }
 
         .toast.success {
@@ -649,6 +664,22 @@
             }
             to {
                 opacity: 0;
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            #toast-container {
+                top: 70px;
+                right: 10px;
+                left: 10px;
+            }
+
+            .toast {
+                min-width: unset;
+                width: 100%;
+                box-sizing: border-box;
+                font-size: 14px;
             }
         }
     </style>
