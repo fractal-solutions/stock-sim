@@ -456,87 +456,28 @@ initializeThemeSelector();
 
 function initializeMobileAccountPanel() {
     const accountPanel = document.getElementById('account-panel');
-    let startY = 0;
-    let isDragging = false;
-
-    function handleTouchStart(e) {
-        if (!e.target.closest('h3')) return; // Only allow dragging from the header
-        isDragging = true;
-        startY = e.touches[0].clientY;
-    }
-
-    function handleTouchMove(e) {
-        if (!isDragging) return;
-        
-        const currentY = e.touches[0].clientY;
-        const deltaY = currentY - startY;
-        
-        // Invert the direction: negative deltaY moves panel up, positive moves it down
-        if (accountPanel.classList.contains('collapsed')) {
-            // If collapsed, only allow upward movement (negative deltaY)
-            if (deltaY < 0) {
-                accountPanel.style.transform = `translateY(calc(100% - 50px + ${deltaY}px))`;
-            }
-        } else {
-            // If expanded, only allow downward movement (positive deltaY)
-            if (deltaY > 0) {
-                accountPanel.style.transform = `translateY(${deltaY}px)`;
-            }
+    
+    function handlePanelClick(e) {
+        // Only toggle if clicking the header area or drag handle
+        const header = accountPanel.querySelector('h3');
+        if (e.target === header || e.target.closest('h3')) {
+            accountPanel.classList.toggle('collapsed');
         }
-        
-        e.preventDefault();
-    }
-
-    function handleTouchEnd() {
-        if (!isDragging) return;
-        isDragging = false;
-        
-        const currentTransform = new WebKitCSSMatrix(
-            window.getComputedStyle(accountPanel).transform
-        ).m42;
-        
-        const threshold = 50; // pixels to determine expand/collapse
-        
-        if (accountPanel.classList.contains('collapsed')) {
-            // If moving up from collapsed state
-            if (currentTransform < -threshold) {
-                accountPanel.classList.remove('collapsed');
-            }
-        } else {
-            // If moving down from expanded state
-            if (currentTransform > threshold) {
-                accountPanel.classList.add('collapsed');
-            }
-        }
-        
-        accountPanel.style.transform = '';
-    }
-
-    function togglePanel() {
-        accountPanel.classList.toggle('collapsed');
     }
 
     if (window.innerWidth <= 768) {
-        // Add touch event listeners
-        accountPanel.addEventListener('touchstart', handleTouchStart, { passive: false });
-        accountPanel.addEventListener('touchmove', handleTouchMove, { passive: false });
-        accountPanel.addEventListener('touchend', handleTouchEnd);
-
-        // Add click handler for the drag handle
-        const dragHandle = accountPanel.querySelector('h3');
-        if (dragHandle) {
-            dragHandle.addEventListener('click', togglePanel);
-        }
+        // Remove previous listeners if any
+        accountPanel.removeEventListener('touchstart', handlePanelClick);
+        
+        // Add click handler
+        accountPanel.querySelector('h3').addEventListener('click', handlePanelClick);
 
         // Initialize in expanded state
         accountPanel.classList.remove('collapsed');
     } else {
         // Remove mobile-specific classes and listeners for desktop
         accountPanel.classList.remove('collapsed');
-        accountPanel.style.transform = '';
-        accountPanel.removeEventListener('touchstart', handleTouchStart);
-        accountPanel.removeEventListener('touchmove', handleTouchMove);
-        accountPanel.removeEventListener('touchend', handleTouchEnd);
+        accountPanel.querySelector('h3').removeEventListener('click', handlePanelClick);
     }
 }
 
