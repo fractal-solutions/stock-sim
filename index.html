@@ -471,7 +471,7 @@
                 height: auto;
                 max-height: 80vh;
                 overflow-y: auto;
-                z-index: 1000;
+                z-index: 100;
                 padding: 20px;
                 transform: translateY(0);
                 transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -539,6 +539,25 @@
             .btn {
                 flex: 1;
                 margin: 0 5px;
+            }
+
+            /* Optional: Add overlay when panel is expanded */
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 90;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            #account-panel:not(.collapsed) + .overlay {
+                display: block;
+                opacity: 1;
             }
         }
 
@@ -625,6 +644,7 @@
             <div id="positions"></div>
         </div>
     </div>
+    <div class="overlay"></div>
     <script type="module" src="main.js"></script>
     <script type="module" src="trader.js"></script>
 </body>

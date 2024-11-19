@@ -462,15 +462,26 @@ function initializeMobileAccountPanel() {
         const header = accountPanel.querySelector('h3');
         if (e.target === header || e.target.closest('h3')) {
             accountPanel.classList.toggle('collapsed');
+            e.stopPropagation(); // Prevent body click handler from firing
+        }
+    }
+
+    function handleOutsideClick(e) {
+        // If panel is expanded and click is outside panel
+        if (!accountPanel.classList.contains('collapsed') && 
+            !accountPanel.contains(e.target)) {
+            accountPanel.classList.add('collapsed');
         }
     }
 
     if (window.innerWidth <= 768) {
         // Remove previous listeners if any
         accountPanel.removeEventListener('touchstart', handlePanelClick);
+        document.body.removeEventListener('click', handleOutsideClick);
         
-        // Add click handler
+        // Add click handlers
         accountPanel.querySelector('h3').addEventListener('click', handlePanelClick);
+        document.body.addEventListener('click', handleOutsideClick);
 
         // Initialize in expanded state
         accountPanel.classList.remove('collapsed');
@@ -478,6 +489,7 @@ function initializeMobileAccountPanel() {
         // Remove mobile-specific classes and listeners for desktop
         accountPanel.classList.remove('collapsed');
         accountPanel.querySelector('h3').removeEventListener('click', handlePanelClick);
+        document.body.removeEventListener('click', handleOutsideClick);
     }
 }
 
