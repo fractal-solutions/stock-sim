@@ -45,3 +45,4 @@ Feel free to submit pull requests or open issues to suggest new features or impr
 ## License 📝
 
 MIT License - See LICENSE file for details
+
